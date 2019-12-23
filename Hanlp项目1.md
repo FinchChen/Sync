@@ -18,3 +18,7 @@ https://maven.apache.org/download.cgi
 * path里添加 %MAVEN_HOME%\bin
 (win7用 ; 分开)
 * 在maven的conf里修改原本的local repo目录
+* 修改阿里云的mirror
+
+
+
