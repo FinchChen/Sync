@@ -100,6 +100,7 @@ hanlp.properties和data这个暂时先不管，碰到了问题再说
 
 ### 3.1 尝试跑通文本聚类
 因为在java下不好调试(也可能是我不会),**人生苦短我用python:**
+
 (训练和调试用python,生成模型后部署在java这样应该可以)
 ``` python
 from pyhanlp import *
@@ -119,6 +120,7 @@ repeated bisection F1=66.49
 Wall time: 59.5 s
 ```
 惊呆了,这跟书上写的完全不一样啊
+
 多试几次之后最好的结果是:
 ```
 kmeans F1=82.27
@@ -128,8 +130,11 @@ repeated bisection F1=78.06
 Wall time: 1min 15s
 ```
 这样的话也算是勉强接近了书中的(kmeans,83.74),(repeatedBisection,85.58)了
+
 重复二分聚类是会比kmeans快一些,但是**成绩波动大**,需要多运行几次.但是这样的问题是在实际部署中你不知道F1的成绩.
+
 运行中我发现python只是调用了Java的class,如果要做修改还是要修改java源码
+
 所以最好的方法应该是找到java类似jupyter notebook这样方便调试的ide(想想都不可能啊)
 
 
@@ -160,15 +165,20 @@ for i in tmp:
 rawresult = analyzer.repeatedBisection(1.0) #必须是float
 ```
 第一种是kmeans聚类,第二种是加强版的kmeans-重复二分类聚类
+
 一,二里面的参数是指定要分多少类
+
 第三种的参数是由β=1.0来自动判断聚类个数
+
 具体参考Hanlp书中 10.4.2 节
+
 由于没有训练测试集,暂时无法得知第三种方法的F1有多少
 ``` python
 len(rawresult) # 128
 listresult = str(rawresult[0]).strip('][').replace(" ","").split(',')
 ```
 返回优化后的listresult: [0001,0002,0003,0004.......]
+
 然后可以看看聚类里的都分了些什么:
 ``` python
 for i in listresult:
@@ -176,7 +186,9 @@ for i in listresult:
     print (open(f'{PATH}'+i+'.txt','r', encoding='UTF-8').read())
 ```
 咦我发现有几个文件是一摸一样的
+
 所以聚类可以很容易的分出他们
+
 那么将重复的都删掉,再运行的话可能会分出更准确的聚类
 ``` python
 import os
@@ -233,6 +245,7 @@ print (counter.top(10))
 > [林丹=283, 中国队=279, 比赛=156, 中=149, 鲍春来=119, 决赛=118, 局=108, 李永波=84, 对手=82, 比分=80]
 
 单看这个我们可以把分出来的这类取名叫<林丹>
+
 再看看每个文件的:
 ``` python
 for i in listresult:
@@ -283,12 +296,16 @@ for i in listresult:
 [蔡赟, 付海峰, 比分, 局, 领先, 组合, 平, 休息, 丹麦, 进入]
 ```
 可以看到虽然林丹的文本虽然占了一半,但还是有很多不是羽毛球的被分了进来
+
 准确率大概只有70%
+
 (然后又尝试了二元短语提取和关键句提取,效果并不理想)
+
 之后再回到聚类上面去研究算法
 
 ## 6.python: 单词语义相似度
 参考书13.3.4节
+
 看书的过程中,我对word2vec做的单词语义相似度有点感兴趣,实现了一下
 ``` python
 from pyhanlp import *
@@ -342,6 +359,9 @@ print_nearest("袜子", wordVectorModel)
                                                胡卫红		0.401735
 ```
 这都是什么啊哈哈哈哈哈哈哈...感觉是因为测试用的语料库太少了
+
 深度学习的word2vec的话肯定是数据越多准确率越高的
+
 书中推荐爬取wikipedia做成语料库
+
 留着以后实现吧
