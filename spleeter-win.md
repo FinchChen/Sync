@@ -43,7 +43,7 @@ pip install spleeter -i https://pypi.tuna.tsinghua.edu.cn/simple/
 解压然后放入 工作目录/pretrained_models/2stems
 
 ``` bash
-spleeter separate -i C:/spleeter/zang.mp3 -p spleeter:2stems -o C:/spleeter/output
+spleeter separate -i C:/spleeter/"刘德华 - 中国人.flac" -p spleeter:5stems -o C:/spleeter/output
 ```
 nice 能用了
 
