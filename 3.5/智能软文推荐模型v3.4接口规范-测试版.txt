@@ -1,0 +1,56 @@
+请求地址: 
+106.13.151.200/tuijian/v3.4
+
+请求方式: 
+POST
+
+参数体:
+
+Header里面:
+ Content-Type:'application/x-www-form-urlencoded'
+
+Body里面:
+'content':传入文章正文或者关键词 (string)
+↑必需↑
+
+'user_id':用户身份标识 (string)
+↑必需↑
+
+'size':需要返回多少篇文章id (int)
+↑必需↑
+
+参数说明:
+
+1. content关键词需要以空格隔开
+2. user_id最好是一串不容易重复的string, 同一user_id共享同一已推荐列表
+3. size最大为50
+
+参数示例:
+
+'content'='海王 电影'
+'user_id'='test_user_1'
+'size'=3
+
+返回示例:
+{
+    "status": 200,
+    "info": "success",
+    "data": [
+        "5ca8d7bea63ccf4b372b7970",
+        "5c13942ca63ccf148d619d56",
+        "5c0e5f03a63ccfbd490e9e36"
+    ]
+}
+
+返回值说明:
+
+1. 200 正常
+2. 601 智图文库里已经没有与该关键词相似度>0.6的文章了
+3. 602 向量化api超时
+4. 610 未知错误
+
+
+其他:
+
+1. 关键词第一次被检索, 延迟≈400ms
+2. 之后能达到最快55ms返回推荐结果
